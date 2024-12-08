@@ -3,13 +3,18 @@ package domain
 import "errors"
 
 type User struct {
-	ID       int
+	ID       ID[User]
 	Username string
 	Password string
 }
 
 // NewUser: Userエンティティを作成するファクトリメソッド
 func NewUser(id int, username, password string) (User, error) {
+	userId, err := NewID[User](id)
+	if err != nil {
+		return User{}, err
+	}
+
 	if len(username) < 3 {
 		return User{}, errors.New("username must be at least 3 characters long")
 	}
@@ -17,7 +22,7 @@ func NewUser(id int, username, password string) (User, error) {
 		return User{}, errors.New("password must be at least 6 characters long")
 	}
 	return User{
-		ID:       id,
+		ID:       userId,
 		Username: username,
 		Password: password,
 	}, nil

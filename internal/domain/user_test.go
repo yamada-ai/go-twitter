@@ -13,7 +13,7 @@ func TestUser_Normal(t *testing.T) {
 		t.Errorf("Expected no error, got %v", err)
 	}
 
-	if user.ID != 1 {
+	if user.ID.Value() != 1 {
 		t.Errorf("Expected ID to be 1, got %v", user.ID)
 	}
 
@@ -23,6 +23,13 @@ func TestUser_Normal(t *testing.T) {
 
 	if user.Password != "pass123" {
 		t.Errorf("Expected Password to be 'pass123', got %v", user.Password)
+	}
+}
+
+func TestUser_IDValidationError(t *testing.T) {
+	_, err := NewUser(-1, "validUser", "password123")
+	if err == nil || err.Error() != "ID value cannot be negative" {
+		t.Errorf("Expected error for negative ID, got %v", err)
 	}
 }
 
