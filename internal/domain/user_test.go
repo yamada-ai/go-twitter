@@ -13,16 +13,16 @@ func TestUser_Normal(t *testing.T) {
 		t.Errorf("Expected no error, got %v", err)
 	}
 
-	if user.ID.Value() != 1 {
-		t.Errorf("Expected ID to be 1, got %v", user.ID)
+	if user.id.Value() != 1 {
+		t.Errorf("Expected ID to be 1, got %v", user.id)
 	}
 
-	if user.Username != "validUser" {
-		t.Errorf("Expected Username to be 'validUser', got %v", user.Username)
+	if user.username != "validUser" {
+		t.Errorf("Expected Username to be 'validUser', got %v", user.username)
 	}
 
-	if user.Password != "pass123" {
-		t.Errorf("Expected Password to be 'pass123', got %v", user.Password)
+	if user.password != "pass123" {
+		t.Errorf("Expected Password to be 'pass123', got %v", user.password)
 	}
 }
 
