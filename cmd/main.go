@@ -1,21 +1,31 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
+	"github.com/yamada-ai/go-twitter/api"
+	"github.com/yamada-ai/go-twitter/internal/controller"
+	"github.com/yamada-ai/go-twitter/internal/domain"
+	"github.com/yamada-ai/go-twitter/internal/infrastructure"
+	"github.com/yamada-ai/go-twitter/internal/usecase"
 )
 
 func main() {
-	r := gin.Default()
+	e := echo.New()
 
-	// ヘルスチェック用のエンドポイント
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "OK",
-		})
-	})
+	// モックリポジトリに1ユーザー追加
+	mockRepo := infrastructure.NewMockUserRepository()
+	user, err := domain.NewUser(1, "testuser", "password123")
+	if err != nil {
+		log.Fatalf("Failed to create user: %v", err)
+	}
+	mockRepo.AddUser(user)
 
-	// サーバー起動
-	r.Run(":8080") // ポート8080で起動
+	userU := usecase.NewUserUsecase(mockRepo)
+	server := controller.NewServer(userU)
+
+	api.RegisterHandlers(e, server) // OpenAPIで生成されたルーターにハンドラ登録
+
+	e.Logger.Fatal(e.Start(":8080"))
 }

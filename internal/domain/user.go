@@ -3,9 +3,9 @@ package domain
 import "errors"
 
 type User struct {
-	id       ID[User]
-	username string
-	password string
+	ID       ID[User]
+	Username string
+	Password string
 }
 
 // NewUser: Userエンティティを作成するファクトリメソッド
@@ -22,8 +22,8 @@ func NewUser(id int, username, password string) (User, error) {
 		return User{}, errors.New("password must be at least 6 characters long")
 	}
 	return User{
-		id:       userId,
-		username: username,
-		password: password,
+		ID:       userId,
+		Username: username,
+		Password: password,
 	}, nil
 }
